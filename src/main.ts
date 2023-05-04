@@ -1,4 +1,10 @@
-import { Schema, Model, SchemaType, isValidObjectId } from "mongoose";
+import {
+  Schema,
+  Model,
+  SchemaType,
+  isValidObjectId,
+  CallbackError,
+} from "mongoose";
 
 const messages: Record<string, any> = {
   schemaTypeError: {
@@ -28,8 +34,7 @@ export function MongooseFindByReference(schema: Schema) {
   if (schema.constructor.name !== "Schema")
     throw new Error(i18n("schemaTypeError"));
 
-  // 对 Schema 挂上钩子
-  schema.pre(["find", "findOne"], async function (next) {
+  async function hook(this: any, next: (e?: CallbackError) => void) {
     /** 当前的 Model 们 */
     const models = this.model.db.models;
 
@@ -201,5 +206,14 @@ export function MongooseFindByReference(schema: Schema) {
     }
     (this as any)._conditions = await lookup([], (this as any)._conditions);
     next();
+  }
+
+  // 对 Schema 挂上钩子
+  schema.pre(["find", "findOne", "count"], async function (next) {
+    await hook.apply(this, [next]);
+  });
+
+  schema.pre("countDocuments", async function (next) {
+    await hook.apply(this, [next]);
   });
 }
