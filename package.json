@@ -2,7 +2,7 @@
   "name": "@gswag/mongoose-find-by-reference",
   "author": "Asif Mahmud Shimon",
   "homepage": "https://github.com/cheezone/mongoose-find-by-reference",
-  "version": "1.0.8",
+  "version": "1.0.9",
   "description": "Make Mongoose support finding in reference fields.",
   "main": "dist/main.js",
   "types": "dist/main.d.ts",
@@ -28,7 +28,7 @@
   ],
   "license": "Apache 2.0",
   "peerDependencies": {
-    "mongoose": "6.2.1"
+    "mongoose": "^7.1.1"
   },
   "devDependencies": {
     "eslint": "^8.8.0",
